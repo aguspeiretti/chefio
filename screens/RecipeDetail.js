@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -13,14 +13,16 @@ import {
 import fondo from "../assets/fondo1.png";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import data from "../Mock";
 import * as Icon from "react-native-feather";
 import { useNavigation } from "@react-navigation/native";
+import { UseApiContext, useRecipsrContext } from "../context/Context";
 
 const RecipeDetail = ({ route }) => {
-  const id = route.params.id;
-  const dataFiltrada = data.filter((item) => item.id == id);
   const navigation = useNavigation();
+  const apiContext = useContext(UseApiContext);
+  const { recipes } = apiContext;
+  const slug = route.params.slug;
+  const dataFiltrada = recipes.filter((item) => item.slug == slug);
 
   return (
     <ImageBackground source={fondo} resizeMode={"cover"} style={styles.image}>
@@ -37,7 +39,7 @@ const RecipeDetail = ({ route }) => {
               }}
             >
               <View>
-                <Text style={styles.titulo}>{dataFiltrada[0].nombre}</Text>
+                <Text style={styles.titulo}>{dataFiltrada[0].titulo}</Text>
                 <Text style={styles.autorTitle}>@{dataFiltrada[0].autor}</Text>
               </View>
 
@@ -114,7 +116,7 @@ const RecipeDetail = ({ route }) => {
             <Text style={styles.secundario}> Ingredientes:</Text>
             <View style={styles.ingredientContainer}>
               {dataFiltrada[0].ingredientes.map((item) => (
-                <Text key={item.id} style={styles.ingredientsTags}>
+                <Text key={item.slug} style={styles.ingredientsTags}>
                   {item}
                 </Text>
               ))}

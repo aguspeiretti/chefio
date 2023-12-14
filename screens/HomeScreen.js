@@ -1,21 +1,24 @@
 import { View, Text, ImageBackground, StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import fondo from "../assets/fondo2.png";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RecipeViewer from "../components/RecipeViewer";
 import NavBar from "../components/NavBar";
 import Header from "../components/Header";
-import data from "../Mock";
+import { UseApiContext } from "../context/Context";
 
 export default function HomeScreen() {
+  const apiContext = useContext(UseApiContext);
+  const { recipes } = apiContext;
+
   return (
     <ImageBackground source={fondo} resizeMode={"cover"} style={styles.image}>
       <SafeAreaView>
         <StatusBar barStyle="light-content" />
         <View style={styles.homeContainer}>
           <Header title={"Mis Recetas"} />
-          <RecipeViewer data={data} />
+          <RecipeViewer data={recipes} />
           <NavBar />
         </View>
       </SafeAreaView>

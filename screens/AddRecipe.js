@@ -13,6 +13,8 @@ import {
 import fondo from "../assets/fondo2.png";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { db, storage } from "../firebase/firebase-config";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 export default function AddRecipe() {
   const [title, setTitle] = useState("");
@@ -24,6 +26,12 @@ export default function AddRecipe() {
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const navigation = useNavigation();
+
+  const createRecipe = async (values) => {
+    return addDoc(collection(db, "recetas"), { ...values }).then(() =>
+      console.log("producto agregado")
+    );
+  };
 
   const handleIngredientChange = (text) => {
     setNewIngredient(text);
@@ -50,16 +58,17 @@ export default function AddRecipe() {
 
   const handleSubmit = () => {
     // Aquí puedes manejar la lógica para enviar los datos del formulario
-    console.log("Datos del formulario:", {
-      title,
-      portions,
-      prepTime,
-      ingredients,
-      difficulty,
-      image,
-      description,
-    });
-    navigation.navigate("Home");
+    const formData = {
+      titulo: title,
+      porciones: portions,
+      tiempoPreparacion: prepTime,
+      infredientes: ingredients,
+      dificultad: difficulty,
+      instrucciones: description,
+    };
+
+    createRecipe(formData);
+    // navigation.navigate("Home");
   };
 
   return (

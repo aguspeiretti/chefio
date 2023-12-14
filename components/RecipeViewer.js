@@ -7,7 +7,7 @@ export default function RecipeViewer({ data }) {
     <View style={styles.sizer}>
       <ScrollView contentContainerStyle={styles.container}>
         {data.map((dato, index) => (
-          <Card key={dato.id} data={dato} />
+          <Card key={dato.slug} data={dato} />
         ))}
       </ScrollView>
     </View>

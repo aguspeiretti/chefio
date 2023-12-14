@@ -21,7 +21,7 @@ const Card = ({ data }) => {
 
   return (
     <View>
-      <View key={data.title} style={styles.card}>
+      <View key={data.titulo} style={styles.card}>
         <ImageComponent imageUrl={data.imagen} />
         <View style={styles.content}>
           <View
@@ -31,7 +31,7 @@ const Card = ({ data }) => {
               alignItems: "center",
             }}
           >
-            <Text style={styles.title}>{data.nombre}</Text>
+            <Text style={styles.title}>{data.titulo}</Text>
             <Icon.Heart
               height="25"
               width="25"
@@ -72,7 +72,7 @@ const Card = ({ data }) => {
             <View style={styles.rightDiv}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("RecipeDetail", { id: data.id });
+                  navigation.navigate("RecipeDetail", { slug: data.slug });
                 }}
               >
                 <Text style={styles.btnCard}>Ver receta</Text>

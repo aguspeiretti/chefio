@@ -38,17 +38,23 @@ export default function RegisterScreen() {
       });
   };
 
-  const handleSignIn = async () => {
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(`New User: ${user}`);
-        navigation.navigate("Home");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  
+  const onSubmit = async (data) => {
+    const newUser = {
+      nombreApellido: data.nombre,
+      email: data.email,
+      contrasena: data.password,
+      favoritos: { array: [], titulo: "favoritos" },
+    };
+    const nUser = await addUser(newUser);
+
+    localStorage.setItem(
+      "usuarioDondeComemo",
+      JSON.stringify(nUser._key.path.segments[1])
+    );
+    window.location = "/Home";
   };
+
 
   return (
     <ImageBackground source={bg} resizeMode={"cover"} style={styles.image}>
