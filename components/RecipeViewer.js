@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
 import Card from "./card";
 
 export default function RecipeViewer({ data }) {
+  const [search, setSearch] = useState("");
+
+  const productFiltred = data.filter((recip) =>
+    recip.titulo.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <View style={styles.sizer}>
       <ScrollView contentContainerStyle={styles.container}>
-        {data.map((dato, index) => (
-          <Card key={dato.slug} data={dato} />
-        ))}
+        {productFiltred
+          ? productFiltred.map((dato, index) => (
+              <Card key={dato.slug} data={dato} />
+            ))
+          : data.map((dato, index) => <Card key={dato.slug} data={dato} />)}
       </ScrollView>
     </View>
   );

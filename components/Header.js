@@ -3,13 +3,13 @@ import React from "react";
 import Profile from "./Profile";
 import SearchBar from "./SearchBar";
 
-const Header = ({ title }) => {
+const Header = ({ title, onSearch }) => {
   return (
     <View style={styles.headerContainer}>
       <Profile />
       <View style={{ marginLeft: 15, justifyContent: "center" }}>
         <Text style={styles.header}>{title}</Text>
-        <SearchBar />
+        <SearchBar onSearch={onSearch} />
       </View>
     </View>
   );

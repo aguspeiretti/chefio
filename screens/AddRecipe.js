@@ -65,6 +65,8 @@ export default function AddRecipe() {
       infredientes: ingredients,
       dificultad: difficulty,
       instrucciones: description,
+      imagen:
+        "https://firebasestorage.googleapis.com/v0/b/chefio-76afd.appspot.com/o/generico1.png?alt=media&token=6675d422-04af-4c28-bc99-f082f6d21b92",
     };
 
     createRecipe(formData);

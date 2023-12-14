@@ -11,14 +11,19 @@ import { UseApiContext } from "../context/Context";
 export default function HomeScreen() {
   const apiContext = useContext(UseApiContext);
   const { recipes } = apiContext;
+  const [searchText, setSearchText] = useState("");
+
+  const filteredRecipes = recipes.filter((recipe) =>
+    recipe.titulo.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <ImageBackground source={fondo} resizeMode={"cover"} style={styles.image}>
       <SafeAreaView>
         <StatusBar barStyle="light-content" />
         <View style={styles.homeContainer}>
-          <Header title={"Mis Recetas"} />
-          <RecipeViewer data={recipes} />
+          <Header title={"Mis Recetas"} onSearch={setSearchText} />
+          <RecipeViewer data={filteredRecipes} />
           <NavBar />
         </View>
       </SafeAreaView>

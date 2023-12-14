@@ -1,13 +1,32 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useState } from "react";
 import * as Icon from "react-native-feather";
 
-const SearchBar = () => {
+const SearchBar = ({ onSearch }) => {
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearch = (text) => {
+    // Llama a la función de búsqueda pasando el texto actual
+    onSearch(text);
+  };
+
   return (
     <View style={styles.searchContainer}>
       <View style={styles.interior}>
-        <Icon.Search height="25" width="25" stroke="gray" />
-        <TextInput placeholder="Recetas..." style={styles.textInput} />
+        <TouchableOpacity>
+          <Icon.Search height="25" width="25" stroke="gray" />
+        </TouchableOpacity>
+        <TextInput
+          onChangeText={handleSearch}
+          placeholder="Recetas..."
+          style={styles.textInput}
+        />
       </View>
     </View>
   );
