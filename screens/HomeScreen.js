@@ -13,7 +13,9 @@ export default function HomeScreen() {
   const { recipes } = apiContext;
   const [searchText, setSearchText] = useState("");
 
-  const filteredRecipes = recipes.filter((recipe) =>
+  const myRecipes = recipes.filter((recipe) => recipe.autor === "aguPeiretti");
+
+  const filteredRecipes = myRecipes.filter((recipe) =>
     recipe.titulo.toLowerCase().includes(searchText.toLowerCase())
   );
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   StyleSheet,
   ImageBackground,
 } from "react-native";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+// import {
+//   getAuth,
+//   createUserWithEmailAndPassword,
+//   signInWithEmailAndPassword,
+// } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../firebase/firebase-config";
 import { useNavigation } from "@react-navigation/native";
@@ -19,25 +19,55 @@ import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import bg from "../assets/fondoChefio.png";
+import { UseApiContext } from "../context/Context";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  const [usuarioFiltrado, setUsuarioFiltrado] = useState(null);
+  // const app = initializeApp(firebaseConfig);
+  // const auth = getAuth(app);
   const navigation = useNavigation();
+  const apiContext = useContext(UseApiContext);
+  const { collectionByParam } = apiContext;
 
-  const handleSignIn = async () => {
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(`New User: ${user}`);
-        navigation.navigate("Home");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  // const handleSignIn = async () => {
+  //   await signInWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       const user = userCredential.user;
+  //       console.log(`New User: ${user}`);
+  //       navigation.navigate("Home");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+  const validar = async () => {
+    setEmail(email);
+    setPassword(password);
+    const todosUsers = await collectionByParam("usuarios", "email", email);
+    console.log("este es todosUser", todosUsers);
+
+    setUsuarioFiltrado(todosUsers);
   };
+
+  useEffect(() => {
+    if (usuarioFiltrado) {
+      if (usuarioFiltrado.length === 0) {
+        console.log("usuario no encontrado");
+      } else {
+        if (
+          usuarioFiltrado.data.email === email &&
+          usuarioFiltrado.data.password === password
+        ) {
+          navigation.navigate("Home");
+        } else {
+          console.log("usuario o password incorrectoss");
+        }
+      }
+    }
+  }, [email, password, usuarioFiltrado]);
 
   return (
     <ImageBackground source={bg} resizeMode={"cover"} style={styles.image}>
@@ -56,7 +86,10 @@ export default function LoginScreen() {
           value={password}
           style={styles.input}
         />
-        <TouchableOpacity onPress={handleSignIn} style={styles.botonRegistro}>
+        <TouchableOpacity
+          onPress={() => validar()}
+          style={styles.botonRegistro}
+        >
           <Text style={{ color: "#fff", fontSize: 18 }}>Ingresar</Text>
         </TouchableOpacity>
 

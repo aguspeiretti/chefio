@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,6 @@ import {
   StyleSheet,
   ImageBackground,
 } from "react-native";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../firebase/firebase-config";
 import { useNavigation } from "@react-navigation/native";
@@ -19,42 +14,39 @@ import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import bg from "../assets/fondoChefio.png";
+import { UseApiContext } from "../context/Context";
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  const [nickName, setNickName] = useState("");
   const navigation = useNavigation();
+  const apiContext = useContext(UseApiContext);
+  const { addUser } = apiContext;
 
-  const handlerCreateAccount = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(`New User: ${user}`);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const handlerCreateAccount = () => {
+  //   createUserWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       const user = userCredential.user;
+  //       console.log(`New User: ${user}`);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
-  
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
+    console.log("llegue");
     const newUser = {
-      nombreApellido: data.nombre,
-      email: data.email,
-      contrasena: data.password,
+      email: email,
+      nickname: nickName,
+      password: password,
       favoritos: { array: [], titulo: "favoritos" },
     };
     const nUser = await addUser(newUser);
-
-    localStorage.setItem(
-      "usuarioDondeComemo",
-      JSON.stringify(nUser._key.path.segments[1])
-    );
-    window.location = "/Home";
+    console.log(nUser);
+    navigation.navigate("Login");
   };
-
 
   return (
     <ImageBackground source={bg} resizeMode={"cover"} style={styles.image}>
@@ -76,8 +68,14 @@ export default function RegisterScreen() {
           value={password}
           style={styles.input}
         />
+        <TextInput
+          placeholder="Nickname"
+          onChangeText={(text) => setNickName(text)}
+          value={nickName}
+          style={styles.input}
+        />
         <TouchableOpacity
-          onPress={handlerCreateAccount}
+          onPress={() => onSubmit()}
           style={styles.botonRegistro}
         >
           <Text style={{ color: "#fff", fontSize: 18 }}>Registrarme</Text>

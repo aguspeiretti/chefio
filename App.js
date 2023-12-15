@@ -18,7 +18,7 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{ headerShown: false }}
-          initialRouteName="Home"
+          initialRouteName="Register"
         >
           <Stack.Screen name="RecipeDetail" component={RecipeDetail} />
           <Stack.Screen name="Favorites" component={Favorites} />
